@@ -30,20 +30,13 @@ int main(void){
     beginADC();
     //clear_screen();
     print_labels();
-    timer_capture();
+    //timer_capture();
     while(1){
 
-        //print_data();
+        //if(check_timerflag()){
+       //     get_frequency();
+       // }
 
-        if(check_timerflag()){
-            get_frequency();
-        }
-
-       // if(check_ADCflag()){
-            //get_ADCdata();
-            print_data();
-
-        //}
-
+       print_data();
     }
 }
