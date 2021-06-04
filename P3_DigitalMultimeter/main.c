@@ -23,15 +23,27 @@ int main(void) {
      }
 }
 */
+
+
 int main(void){
     WDT_A->CTL = WDT_A_CTL_PW | WDT_A_CTL_HOLD;   // stop WDT
-        UART_init();
-        print_labels();
-        move2measure(1);
-        //move_right(8);
+    beginADC();
+    //clear_screen();
+    print_labels();
+    timer_capture();
+    while(1){
+
         //print_data();
-        //move2measure(3);
-        //move_right(8);
-        //print_data();
-        while(1);
+
+        if(check_timerflag()){
+            get_frequency();
+        }
+
+       // if(check_ADCflag()){
+            //get_ADCdata();
+            print_data();
+
+        //}
+
+    }
 }

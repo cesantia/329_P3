@@ -14,16 +14,9 @@
 
     uint32_t check_ADCflag(void);
 
-    ////get functions
-    int get_peak(void);
-    int get_RMS(void);
-    int get_DC(void);
-    void DC_to_UART(void);
-    void AC_to_UART(void);
-    void RMS_to_UART(void);
-    void get_vals(void);
+
     //void UART_init(void);
-    void get_ADCdata(void);
+    int get_ADCdata(void);
 
 
 #endif /* ADC_H_ */
