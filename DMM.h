@@ -8,7 +8,7 @@
 #define DMM_H_
 
     ////get functions
-    int get_peak(void);
+    /*int get_peak(void);
     int get_RMS(void);
     int get_DC(void);
     void DC_to_UART(void);
@@ -23,14 +23,13 @@
     void print_labels(void); //print labels for measurements
     void move2measure(int row); //set Escape code to move cursor to each measurement
     void print_data(void);  //print_data(DC Voltage, AC Voltage, True RMS, Frequency);
-    uint32_t check_timerflag(void);
-    /*
-     * when functions are complete
-     * //functions
+    uint32_t check_timerflag(void);*/
+
+     // when functions are complete
+     //functions
         void start(void);
-        void get_data(void);
-        uint32_t check_flag(void);
-     */
+        void print_data(void);
+
     #define  ESC    27
     #define SPACE   32
     #define ENTER   13

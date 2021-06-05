@@ -11,9 +11,11 @@
 
     //functions
     void beginADC(void);
+    void timer_capture(void);
 
     uint32_t check_ADCflag(void);
-
+    uint32_t check_timerflag(void);
+    int get_frequency(void);
 
     //void UART_init(void);
     int get_ADCdata(void);

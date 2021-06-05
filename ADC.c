@@ -19,12 +19,11 @@ void ADC_init(void) {
     // GPIO Setup
     P1->OUT &= ~BIT0;                 // Clear LED to start
     P1->DIR |= BIT0;                  // Set P1.0/LED to output
-    P2->OUT &= ~BIT0;                 // Clear LED to start
-    P2->DIR |= BIT0;                  // Set P2.0/LED to output
+
     P5->SEL1 |= BIT4;                 // Configure P5.4 for ADC
     P5->SEL0 |= BIT4;
 
-    // Sampling time = 4 clock cycles, ADC14 on    //4, 16, 96, 192...0, 2, 5, 7
+    // Sampling time = 96 clock cycles, ADC14 on    5
     ADC14->CTL0 = ADC14_CTL0_SHT0_5 | ADC14_CTL0_SHP | ADC14_CTL0_ON;
     ADC14->CTL1 = ADC14_CTL1_RES_3;     // Use sampling timer, 14-bit conversion
 
@@ -33,10 +32,10 @@ void ADC_init(void) {
     ADC14->CTL0 |= ADC14_CTL0_ENC;        // Enable conversions
 
     // Enable ADC interrupt in NVIC module
-   // NVIC->ISER[0] = 1 << ((ADC14_IRQn) & 31);
+    NVIC->ISER[0] = 1 << ((ADC14_IRQn) & 31);
 
     // Enable global interrupt
-    //__enable_irq();
+    __enable_irq();
 
     // Start sampling/conversion
     ADC14->CTL0 |= ADC14_CTL0_SC;
@@ -60,8 +59,9 @@ void UART_init(void){
 }
 
 void timer_capture(void){
-    P2->OUT &= ~BIT0;                 // Clear LED to start
-    P2->DIR |= BIT0;                  // Set P1.0/LED to output
+    P2->OUT &= ~BIT2;                 // Clear LED to start
+    P2->DIR |= BIT2;                  // Set P2.0/LED to output
+
     P2->SEL0 |= BIT5;     // TA0.CCI2A input capture pin, second function
     P2->DIR &= ~BIT5;
 
@@ -99,7 +99,7 @@ void ADC14_IRQHandler(void) {
 // TimerA0_N interrupt service routine
 void TA0_N_IRQHandler(void){
      volatile static uint32_t captureCount = 0;   //static: variable will retain its call during function calls
-     P2->OUT |= BIT0;                // P1.0 = 1
+     P2->OUT |= BIT2;                // P2.2 = 1
 
      if (TIMER_A0->CCTL[2] & TIMER_A_CCTLN_CCIFG)
      {
@@ -116,7 +116,7 @@ void TA0_N_IRQHandler(void){
        // Clear the interrupt flag
        TIMER_A0->CCTL[2] &= ~(TIMER_A_CCTLN_CCIFG);
      }
-     P2->OUT &= ~BIT0;               // P1.0 = 0
+     P2->OUT &= ~BIT2;               // P2.2 = 0
 }
 
 
@@ -135,7 +135,7 @@ void beginADC(void) {
 
 
 int get_ADCdata(void) {
-    // __disable_irq();  // disable interrupts
+     //__disable_irq();  // disable interrupts
 
     // Start sampling/conversion
     ADC14->CTL0 |= ADC14_CTL0_SC;
@@ -143,18 +143,18 @@ int get_ADCdata(void) {
      //read the digital output from the waveform generator
      DigiRead = ADC14->MEM[0];
 
-     //ADCflag = 0;    // clear capture flag
+     ADCflag = 0;    // clear capture flag
 
     //Calibrate value for measured voltage
     measurement = (202*DigiRead) - 1240;
 
-   // __enable_irq();   // enable interrupt again
+    //__enable_irq();   // enable interrupt again
 
     return measurement;
 }
 
 
-int get_frequency(){
+int get_frequency(void){
 
         __disable_irq();  // protect capture times
 
